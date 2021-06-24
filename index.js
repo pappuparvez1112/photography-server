@@ -11,6 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static('photographer'));
+app.use(express.static('clients'));
 app.use(fileUpload());
 console.log(process.env.DB_USER)
 
@@ -25,6 +26,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const photographycollection = client.db("photography").collection("photographers");
   const clientscollection = client.db("photography").collection("clients");
+  const bookingcollection = client.db("photography").collection("bookings");
+
   // perform actions on the collection object
   // client.close();
 
@@ -137,15 +140,25 @@ client.connect(err => {
 
 
 
-  //   app.post('/addProduct',(req,res)=>{
-  //     const newProduct=req.body;
-  //     console.log('adding product',newProduct);
-  //     productcollection.insertOne(newProduct)
-  //     .then(result=>{
-  //       console.log('inserted count',result.insertedCount);
-  //       res.send(result.insertedCount>0)
-  //     })
-  //   })
+    app.post('/addBookings',(req,res)=>{
+      const email = req.body.email;
+    const name = req.body.name;
+    const location = req.body.location;
+    const category = req.body.category;
+
+    console.log(name,email,location,category);
+     
+      bookingcollection.insertOne({
+        email,
+        name,
+        location,
+        category
+      })
+      .then(result=>{
+        console.log('inserted count',result.insertedCount);
+        res.send(result.insertedCount>0)
+      })
+    })
 
   //   app.delete('/deleteorder/:id',(req,res)=>{
   //     const id=req.params.id;
