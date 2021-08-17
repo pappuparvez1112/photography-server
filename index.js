@@ -65,7 +65,7 @@ client.connect(err => {
       })
   });
 
-  app.get('/photographerss', (req, res) => {
+  app.get('/photographers', (req, res) => {
     photographycollection.find()
       .toArray((err, documents) => {
         const pic_data = documents[0].file.data
